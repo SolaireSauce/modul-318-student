@@ -9,7 +9,7 @@ namespace SwissTransport
         public List<Connection> ConnectionList { get; set; } 
     }
 
-    public class Connection
+    public class Connection : ConnectionPoint
     {
         [JsonProperty("from")]
         public ConnectionPoint From  { get; set; }
@@ -21,7 +21,7 @@ namespace SwissTransport
         public string Duration { get; set; }
     }
 
-    public class ConnectionPoint
+    public class ConnectionPoint : Station
     {
         [JsonProperty("station")]
         public Station Station { get; set; }

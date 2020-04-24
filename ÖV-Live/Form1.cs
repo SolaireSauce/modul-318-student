@@ -42,7 +42,14 @@ namespace ÖV_Live
             listBox4.Items.Clear();
 
             connections = null;
-            if(departure.Name != null && destination.Name != null)
+            try
+            {
+                if (departure.Name != null && destination.Name != null);
+            }
+            catch
+            {
+                return;
+            }
             connections = transport.GetConnections(departure.Name, destination.Name, dateTimePicker1.Value.Date, dateTimePicker3.Value.Date, false);
             
             if (connections == null)
@@ -63,8 +70,16 @@ namespace ÖV_Live
             listBox5.Items.Clear();
             
             stationboard = null;
-            if (departure.Name != null)
+            try
+            {
+                if (departure.Name != null);
+            }
+            catch { }
+            try
+            {
                 stationboard = transport.GetStationBoard(departure.Name);
+            }
+            catch { }
 
             if (stationboard == null)
             {
@@ -86,12 +101,14 @@ namespace ÖV_Live
             {
                 station.Add(i);
             }
-            var coordinate = station[0].Coordinate;
-
-            var xCoord = coordinate.XCoordinate.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);
-            var yCoord = coordinate.YCoordinate.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);
-
-            System.Diagnostics.Process.Start("http://maps.google.com/maps?q=" + xCoord + "," + yCoord + "&ll=" + xCoord + "," + yCoord + "&z=17");
+            try 
+            {
+                var coordinate = station[0].Coordinate; 
+                var xCoord = coordinate.XCoordinate.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);
+                var yCoord = coordinate.YCoordinate.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);
+                System.Diagnostics.Process.Start("http://maps.google.com/maps?q=" + xCoord + "," + yCoord + "&ll=" + xCoord + "," + yCoord + "&z=17");
+            }
+            catch { return; }
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -159,13 +176,25 @@ namespace ÖV_Live
         private void button3_Click(object sender, EventArgs e)
         {
             departure = (SwissTransport.Station)listBox1.SelectedItem;
-            textBox1.Text = departure.Name;
+            try
+            {
+                textBox1.Text = departure.Name;
+            }
+            catch
+            {
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             destination = (SwissTransport.Station)listBox2.SelectedItem;
-            textBox2.Text = destination.Name;
+            try
+            {
+                textBox2.Text = destination.Name;
+            }
+            catch(NullReferenceException)
+            { 
+            }
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -217,7 +246,11 @@ namespace ÖV_Live
         private void button5_Click(object sender, EventArgs e)
         {
             departure = (SwissTransport.Station)listBox3.SelectedItem;
-            textBox4.Text = departure.Name;
+            try
+            {
+                textBox4.Text = departure.Name;
+            }
+            catch { }
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -250,7 +283,11 @@ namespace ÖV_Live
         private void button9_Click(object sender, EventArgs e)
         {
             departure = (SwissTransport.Station)listBox7.SelectedItem;
-            textBox3.Text = departure.Name;
+            try 
+            {
+                textBox3.Text = departure.Name;
+            }
+            catch { }
         }
 
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
@@ -292,8 +329,10 @@ namespace ÖV_Live
                 }
             };
             MailAddress FromEmail = new MailAddress("samuel.porchet11@gmail.com", "SolaireSauce");
-            MailAddress ToEmail = new MailAddress(textBox5.Text, "Someone");
-            MailMessage Message = new MailMessage()
+            try
+            {
+                MailAddress ToEmail = new MailAddress(textBox5.Text, "Someone");
+                MailMessage Message = new MailMessage()
             {
                 From = FromEmail,
                 Subject = textBox6.Text,
@@ -302,6 +341,10 @@ namespace ÖV_Live
             Message.To.Add(ToEmail);
             Client.SendCompleted += Client_SendCompleted;
             Client.SendMailAsync(Message);
+            }
+            catch
+            { return; }
+            
         }
 
         private void Client_SendCompleted(object sender, AsyncCompletedEventArgs e)

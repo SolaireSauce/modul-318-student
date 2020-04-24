@@ -7,6 +7,6 @@ namespace SwissTransport
     {
         Stations GetStations(string query);
         StationBoardRoot GetStationBoard(string station);
-        Connections GetConnections(string fromStation, string toStattion, DateTime date, TimeSpan time, Boolean isArrivalTime);
+        Connections GetConnections(string fromStation, string toStattion, DateTime date, DateTime time, Boolean isArrivalTime);
     }
 }

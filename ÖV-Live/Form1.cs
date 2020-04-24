@@ -43,7 +43,7 @@ namespace ÖV_Live
 
             connections = null;
             if(departure.Name != null && destination.Name != null)
-            connections = transport.GetConnections(departure.Name, destination.Name, dateTimePicker1.Value.Date, dateTimePicker3.Value.TimeOfDay, false);
+            connections = transport.GetConnections(departure.Name, destination.Name, dateTimePicker1.Value.Date, dateTimePicker3.Value.Date, false);
             
             if (connections == null)
             {

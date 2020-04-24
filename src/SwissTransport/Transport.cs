@@ -64,13 +64,13 @@ namespace SwissTransport
             return null;
         }
 
-        public Connections GetConnections(string fromStation, string toStation, DateTime date, TimeSpan time, Boolean isArrivalTime)
+        public Connections GetConnections(string fromStation, string toStation, DateTime date, DateTime time, Boolean isArrivalTime)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("de-DE");
             fromStation = System.Uri.EscapeDataString(fromStation);
             toStation = System.Uri.EscapeDataString(toStation);
             string dateString = System.Uri.EscapeDataString(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString());
-            string TimeString = System.Uri.EscapeDataString(time.Hours.ToString() + ":" + time.Minutes.ToString());
+            string TimeString = System.Uri.EscapeDataString(time.Hour.ToString() + ":" + time.Minute.ToString());
             string isArrivalTimeString;
             if (isArrivalTime == true)
             {

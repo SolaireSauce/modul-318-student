@@ -260,7 +260,6 @@ namespace ÖV_Live
 
         private void label6_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Hey Bro, Nice Dick ;)");
         }
 
         private void button10_Click(object sender, EventArgs e)

@@ -27,11 +27,29 @@ namespace SwissTransport
             return null;
         }
 
-        public StationBoardRoot GetStationBoard(string station, string id)
+        public Stations StationFinder(string XCord, string YCord)
+        {
+            XCord = System.Uri.EscapeDataString(XCord);
+            YCord = System.Uri.EscapeDataString(YCord);
+            var request = CreateWebRequest("http://transport.opendata.ch/v1/locations?x=" + XCord + "&y=" + YCord);
+            var response = request.GetResponse();
+            var responseStream = response.GetResponseStream();
+
+            if (responseStream != null)
+            {
+                var message = new StreamReader(responseStream).ReadToEnd();
+                var stations = JsonConvert.DeserializeObject<Stations>(message
+                    , new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return stations;
+            }
+
+            return null;
+        }
+
+        public StationBoardRoot GetStationBoard(string station)
         {
             station = System.Uri.EscapeDataString(station);
-            id = System.Uri.EscapeDataString(id);
-            var request = CreateWebRequest("http://transport.opendata.ch/v1/stationboard?station=" + station + "&id=" + id);
+            var request = CreateWebRequest("http://transport.opendata.ch/v1/stationboard?station=" + station);
             var response = request.GetResponse();
             var responseStream = response.GetResponseStream();
 
@@ -51,10 +69,18 @@ namespace SwissTransport
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("de-DE");
             fromStation = System.Uri.EscapeDataString(fromStation);
             toStation = System.Uri.EscapeDataString(toStation);
-            string dates = System.Uri.EscapeDataString(date.ToString());
-            string Times = System.Uri.EscapeDataString(time.ToString());
-            string ArrivalTimes = System.Uri.EscapeDataString(isArrivalTime.ToString());
-            var request = CreateWebRequest("http://transport.opendata.ch/v1/connections?from=" + fromStation + "&to=" + toStation + "&date=" + dates + "&time=" + Times + "&Arrivaltime=" + ArrivalTimes);
+            string dateString = System.Uri.EscapeDataString(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString());
+            string TimeString = System.Uri.EscapeDataString(time.Hours.ToString() + ":" + time.Minutes.ToString());
+            string isArrivalTimeString;
+            if (isArrivalTime == true)
+            {
+                isArrivalTimeString = System.Uri.EscapeDataString("1");
+            }
+            else
+            {
+                isArrivalTimeString = System.Uri.EscapeDataString("0");
+            }
+            var request = CreateWebRequest("http://transport.opendata.ch/v1/connections?from=" + fromStation + "&to=" + toStation + "&date=" + dateString + "&time=" + TimeString + "&isArrivalTime=" + isArrivalTimeString + "&limit=12");
             var response = request.GetResponse();
             var responseStream = response.GetResponseStream();
 
